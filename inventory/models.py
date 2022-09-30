@@ -41,6 +41,11 @@ class ArtBorrowingRequest(models.Model):
     def __str__(self):
         return f"{self.art_item} at {self.spot} by {self.requester}"
 
+    class Meta:
+        permissions = [
+            ('delete_own_request', 'User can delete own borrowing request'),
+        ]
+
 class ArtLocation(models.Model):
     """
     Shows that an art work is/were placed in a certain spot
