@@ -13,7 +13,7 @@ class IsAuthor(permissions.BasePermission):
 class ArtBorrowingRequestViewSet(viewsets.ModelViewSet):
     queryset = ArtBorrowingRequest.objects.all()
     serializer_class = ArtBorrowingRequestSerializer
-    permission_classes = [IsAuthor|permissions.DjangoObjectPermissions]
+    permission_classes = [IsAuthor|permissions.DjangoObjectPermissions|permissions.DjangoModelPermissions]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
