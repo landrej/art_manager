@@ -2,10 +2,18 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from inventory.models import ArtBorrowingRequest
 from inventory.api.serializers import ArtBorrowingRequestSerializer
+import rest_framework.permissions as permissions
+
+class IsAuthor(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.method == 'DELETE' and request.user.has_perm('inventory.delete_own_request')
+    def has_object_permission(self, request, view, obj):
+        return request.method == 'DELETE' and request.user.has_perm('inventory.delete_own_request') and obj.requester == request.user
 
 class ArtBorrowingRequestViewSet(viewsets.ModelViewSet):
     queryset = ArtBorrowingRequest.objects.all()
     serializer_class = ArtBorrowingRequestSerializer
+    permission_classes = [IsAuthor|permissions.DjangoObjectPermissions]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
