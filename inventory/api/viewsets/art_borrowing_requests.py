@@ -4,7 +4,8 @@ from inventory.models import ArtBorrowingRequest
 from inventory.api.serializers import ArtBorrowingRequestSerializer
 import rest_framework.permissions as permissions
 
-class IsAuthor(permissions.DjangoModelPermissions):
+#class IsAuthor(permissions.DjangoModelPermissions):
+class IsAuthor(permissions.DjangoObjectPermissions):
     def has_permission(self, request, view):
         if request.method == 'DELETE' and request.user.has_perm('inventory.delete_own_request'):
             return True
@@ -17,7 +18,8 @@ class IsAuthor(permissions.DjangoModelPermissions):
 class ArtBorrowingRequestViewSet(viewsets.ModelViewSet):
     queryset = ArtBorrowingRequest.objects.all()
     serializer_class = ArtBorrowingRequestSerializer
-    permission_classes = [IsAuthor|permissions.DjangoObjectPermissions]
+    permission_classes = [IsAuthor]
+    #permission_classes = [IsAuthor|permissions.DjangoObjectPermissions]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
